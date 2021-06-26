@@ -1,10 +1,12 @@
 """Defines the script to generate artificial datasets for poisoning fairness in ML."""
-from enum import IntEnum
 import math
 
 from matplotlib import pyplot as plt
 import numpy as np
 from scipy.stats import multivariate_normal
+
+from commons import Group
+from commons import Outcome
 
 # Determines the initial discrimination in the data.
 # decrease it to generate more discrimination
@@ -16,18 +18,6 @@ DEFAULT_DISTRIB_DISTANCE = np.array([5, 5])
 MU1 = np.array([2, 2])
 SIGMA1 = np.array([[5, 1], [1, 5]])
 SIGMA2 = np.array([[10, 1], [1, 3]])
-
-
-class Outcome(IntEnum):
-    """Defines the classification outcome."""
-    POSITIVE = 1
-    NEGATIVE = 0
-
-
-class Group(IntEnum):
-    """Defines the groups involved."""
-    UNPRIVILEGED = 0
-    PRIVILEGED = 1
 
 
 def plot_data(X, y, S, title="", ax=None, n_disp=200):
@@ -112,7 +102,7 @@ def generate_synthetic_data(n_samples=400, seed=999, disc_factor=DEFAULT_DISC_FA
     """Generate 2D synthetic data for the experiment.
 
     Data will have two non-sensitive features and one sensitive feature.
-    A sensitive attibute value of 0 means the point is considered to be
+    A sensitive attribute value of 0 means the point is considered to be
     in the protected group (e.g., female). A value of 1 means it's from
     the non-protected group (e.g., male).
 
