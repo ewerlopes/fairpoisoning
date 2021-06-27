@@ -1,5 +1,7 @@
 from enum import IntEnum
 
+SEED = 999
+
 
 class Outcome(IntEnum):
     """Defines the classification outcome."""
