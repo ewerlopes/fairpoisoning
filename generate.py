@@ -15,9 +15,9 @@ DEFAULT_DISC_FACTOR = math.pi / 4
 # Determines the distance between distributions
 DEFAULT_DISTRIB_DISTANCE = np.array([5, 5])
 
-MU1 = np.array([2, 2])
-SIGMA1 = np.array([[5, 1], [1, 5]])
-SIGMA2 = np.array([[10, 1], [1, 3]])
+DEFAULT_MU = np.array([2, 2])
+DEFAULT_SIGMA1 = np.array([[5, 1], [1, 5]])
+DEFAULT_SIGMA2 = np.array([[10, 1], [1, 3]])
 
 
 def plot_data(X, y, S, title="", ax=None, n_disp=200):
@@ -96,9 +96,9 @@ def gen_gaussian(mean, cov, class_label, n_samples):
     return normal_var, samples, class_labels
 
 
-def generate_synthetic_data(n_samples=400, seed=999, disc_factor=DEFAULT_DISC_FACTOR,
-                            mu1=MU1, sigma1=SIGMA1, sigma2=SIGMA2,
-                            distrib_distance=DEFAULT_DISTRIB_DISTANCE):
+def generate_synthetic_data(distrib_distance=DEFAULT_DISTRIB_DISTANCE, n_samples=400,
+                            mu1=DEFAULT_MU, sigma1=DEFAULT_SIGMA1, sigma2=DEFAULT_SIGMA2,
+                            disc_factor=DEFAULT_DISC_FACTOR):
     """Generate 2D synthetic data for the experiment.
 
     Data will have two non-sensitive features and one sensitive feature.
@@ -107,13 +107,16 @@ def generate_synthetic_data(n_samples=400, seed=999, disc_factor=DEFAULT_DISC_FA
     the non-protected group (e.g., male).
 
     Args:
-        distrib_distance ([type], optional): [description]. Defaults to np.array([5,5]).
+        distrib_distance ([type], optional): [description]. Defaults to DEFAULT_DISTRIB_DISTANCE.
         n_samples (int, optional): generate these many data points per class. Defaults to 400.
+        mu1 ([type], optional): [description]. Defaults to MU1.
+        sigma1 ([type], optional): [description]. Defaults to SIGMA1.
+        sigma2 ([type], optional): [description]. Defaults to SIGMA2.
+        disc_factor ([type], optional): [description]. Defaults to DEFAULT_DISC_FACTOR.
 
     Returns:
         [type]: [description]
     """
-    np.random.seed(seed)
 
     # Step 1. Generate the non-sensitive features randomly (one gaussian cluster per class)
     mu2 = np.array(mu1-distrib_distance)  # second clusters is separated from the first by distrib_distance.

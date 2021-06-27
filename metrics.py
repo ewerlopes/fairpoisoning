@@ -121,8 +121,19 @@ def false_negative_rate(y_true, y_pred):
     return len(fn) / P
 
 
-# 12[(𝐹𝑃𝑅𝐷=unprivileged−𝐹𝑃𝑅𝐷=privileged)+(𝑇𝑃𝑅𝐷=unprivileged−𝑇𝑃𝑅𝐷=privileged))]
 def average_odds_difference(y_true, y_pred, sensitive_attributes):
+    """Calculate the Average Odds Difference.
+
+    Defined as 0.5 * [(FPRD=unprivileged - FPRD=privileged)+(TPRD=unprivileged - TPRD=privileged))].
+
+    Args:
+        y_true (np.ndarray): the ground truth.
+        y_pred (np.ndarray): the prediction.
+        sensitive_attributes (np.ndarray): the sensitive attributes.
+
+    Returns:
+        float: the Average Odds Difference.
+    """
 
     y_true = np.array(y_true)
     y_pred = np.array(y_pred)
