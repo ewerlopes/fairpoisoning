@@ -146,10 +146,10 @@ def average_odds_difference(y_true, y_pred, sensitive_attributes):
     privileged_y_pred = y_pred[sensitive_attributes == Group.PRIVILEGED]
     unprivileged_y_pred = y_pred[sensitive_attributes == Group.UNPRIVILEGED]
 
-    FPR_unprivileged = false_positive_rate(unprivileged_y_true, unprivileged_y_pred, Outcome.POSITIVE)
-    FPR_privileged = false_positive_rate(privileged_y_true, privileged_y_pred, Outcome.POSITIVE)
-    TPR_unprivileged = true_positive_rate(unprivileged_y_true, unprivileged_y_pred, Outcome.POSITIVE)
-    TPR_privileged = true_positive_rate(privileged_y_true, privileged_y_pred, Outcome.POSITIVE)
+    FPR_unprivileged = false_positive_rate(unprivileged_y_true, unprivileged_y_pred)
+    FPR_privileged = false_positive_rate(privileged_y_true, privileged_y_pred)
+    TPR_unprivileged = true_positive_rate(unprivileged_y_true, unprivileged_y_pred)
+    TPR_privileged = true_positive_rate(privileged_y_true, privileged_y_pred)
 
     return 0.5 * ((FPR_unprivileged - FPR_privileged) + (TPR_unprivileged - TPR_privileged))
 
@@ -175,11 +175,11 @@ def error_rates(y_true, y_pred, sensitive_attributes, verbose=False):
     privileged_y_pred = y_pred[sensitive_attributes == Group.PRIVILEGED]
     unprivileged_y_pred = y_pred[sensitive_attributes == Group.UNPRIVILEGED]
 
-    FNR_privileged = false_negative_rate(privileged_y_true, privileged_y_pred, Outcome.POSITIVE)
-    FNR_unprivileged = false_negative_rate(unprivileged_y_true, unprivileged_y_pred, Outcome.POSITIVE)
+    FNR_privileged = false_negative_rate(privileged_y_true, privileged_y_pred)
+    FNR_unprivileged = false_negative_rate(unprivileged_y_true, unprivileged_y_pred)
 
-    FPR_privileged = false_positive_rate(privileged_y_true, privileged_y_pred, Outcome.POSITIVE)
-    FPR_unprivileged = false_positive_rate(unprivileged_y_true, unprivileged_y_pred, Outcome.POSITIVE)
+    FPR_privileged = false_positive_rate(privileged_y_true, privileged_y_pred)
+    FPR_unprivileged = false_positive_rate(unprivileged_y_true, unprivileged_y_pred)
 
     if verbose:
         print("\tFNR_Privileged: ", FNR_privileged)

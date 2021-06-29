@@ -7,7 +7,7 @@ from secml.ml.peval.metrics import CMetricAccuracy
 from commons import SEED
 
 
-def train_logistic(training_set, test_set):
+def train_logistic(train_set, test_set):
     """Train a Logistic Classifier.
 
     Args:
@@ -28,7 +28,7 @@ def train_logistic(training_set, test_set):
 
     print("Estimating the best training parameters...")
     best_params = clf.estimate_parameters(
-        dataset=training_set,
+        dataset=train_set,
         parameters=xval_params,
         splitter=xval_splitter,
         metric='accuracy',
@@ -37,7 +37,7 @@ def train_logistic(training_set, test_set):
     print("The best training parameters are: ", best_params)
 
     # We can now fit the classifier
-    clf.fit(training_set)
+    clf.fit(train_set.X, train_set.Y)
     print("Training of classifier complete!")
 
     # Compute predictions on a test set

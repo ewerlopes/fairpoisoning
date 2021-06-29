@@ -66,42 +66,42 @@ def construct_dimp_scenarios():
                                                               random_state=SEED)
 
         training2 = CDataset(X_train2[:, :2], y_train2)
-        training_sensible_att2 = X_train2[:, 2]
+        training_sensitive_att2 = X_train2[:, 2]
 
         validation2 = CDataset(X_val2[:, :2], y_val2)
-        validation_sensible_att2 = X_val2[:, 2]
+        validation_sensitive_att2 = X_val2[:, 2]
         val_lambda2 = np.zeros(validation2.num_samples)
 
         # Creating lambda vector
-        val_lambda2[np.where((validation_sensible_att2 == 0) & (y_val2 == 0))[0]] == 1  # Unprivileged denied
-        val_lambda2[np.where((validation_sensible_att2 == 0) & (y_val2 == 1))[0]] == 1  # Unprivileged granted
-        val_lambda2[np.where((validation_sensible_att2 == 1) & (y_val2 == 0))[0]] == -1  # Privileged denied
-        val_lambda2[np.where((validation_sensible_att2 == 1) & (y_val2 == 1))[0]] == -1  # Privileged granted
+        val_lambda2[np.where((validation_sensitive_att2 == 0) & (y_val2 == 0))[0]] == 1  # Unprivileged denied
+        val_lambda2[np.where((validation_sensitive_att2 == 0) & (y_val2 == 1))[0]] == 1  # Unprivileged granted
+        val_lambda2[np.where((validation_sensitive_att2 == 1) & (y_val2 == 0))[0]] == -1  # Privileged denied
+        val_lambda2[np.where((validation_sensitive_att2 == 1) & (y_val2 == 1))[0]] == -1  # Privileged granted
 
         test2 = CDataset(X_test2[:, :2], y_test)
-        test_sensible_att2 = X_test2[:, 2]
+        test_sensitive_att2 = X_test2[:, 2]
 
         scenario = {
             "name": f"Use case 4 - {n}",
             "description": f"Disparate impact attack. \n Euclidean distance between group averages: {n}\n",
             "training": train_set,
-            "training_sensible_att": train_sensitive_att,
+            "training_sensitive_att": train_sensitive_att,
             "validation": val_set,
-            "validation_sensible_att": val_sensitive_att,
+            "validation_sensitive_att": val_sensitive_att,
             "lambda_validation": val_lambda,
             "test": test_set,
-            "test_sensible_att": test_sensitive_att,
+            "test_sensitive_att": test_sensitive_att,
             "all_data": sec_ml_dataset_all,
-            "all_sensible_att": sensitive_attribute,
+            "all_sensitive_att": sensitive_attribute,
             "black_box_training": training2,
-            "black_box_training_sensible_att": training_sensible_att2,
+            "black_box_training_sensitive_att": training_sensitive_att2,
             "black_box_validation": validation2,
-            "black_box_validation_sensible_att": validation_sensible_att2,
+            "black_box_validation_sensitive_att": validation_sensitive_att2,
             "black_box_lambda_validation": val_lambda2,
             "black_box_test": test2,
-            "black_box_test_sensible_att": test_sensible_att2,
+            "black_box_test_sensitive_att": test_sensitive_att2,
             "black_box_all_data": sec_ml_dataset2,
-            "black_box_all_sensible_att": sensitive_attributes2,
+            "black_box_all_sensitive_att": sensitive_attributes2,
         }
 
         dimp_scenarios.append(scenario)
