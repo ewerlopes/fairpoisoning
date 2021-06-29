@@ -82,7 +82,7 @@ def construct_dimp_scenarios():
         test_sensitive_att2 = X_test2[:, 2]
 
         scenario = {
-            "name": f"Use case 4 - {n}",
+            "name": f"Use case for distance= {n}",
             "description": f"Disparate impact attack. \n Euclidean distance between group averages: {n}\n",
             "training": train_set,
             "training_sensitive_att": train_sensitive_att,

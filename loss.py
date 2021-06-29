@@ -58,7 +58,7 @@ class CLossDisparateImpact(CLossClassification):
         p_unpriv = self._unprivileged.sum() / self._unprivileged.size  # proportion of unprivileged
         # loss = (score >= 0) != y  # zero-one loss
         loss = CLossLogistic().loss(y_true=self._unprivileged, score=score)  # smoothed version
-        loss[self._unprivileged] *= -p_priv / p_unpriv  # rebalance class weights
+        loss[self._unprivileged ==1 ] *= -p_priv / p_unpriv  # rebalance class weights
         return loss
 
     def dloss(self, y_true, score, pos_label=1):
@@ -66,5 +66,5 @@ class CLossDisparateImpact(CLossClassification):
         p_priv = self._privileged.sum() / self._privileged.size  # proportion of privileged
         p_unpriv = self._unprivileged.sum() / self._unprivileged.size  # proportion of unprivileged
         grad = CLossLogistic().dloss(self._unprivileged, score, pos_label)
-        grad[self._unprivileged] *= -p_priv / p_unpriv  # rebalance class weights
+        grad[self._unprivileged == 1] *= -p_priv / p_unpriv  # rebalance class weights
         return grad

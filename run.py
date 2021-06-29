@@ -1,6 +1,7 @@
 from copy import deepcopy
 from random import seed
 
+import joblib
 import numpy as np
 from secml.ml.peval.metrics import CMetricAccuracy
 
@@ -10,6 +11,7 @@ from commons import SEED
 from metrics import average_odds_difference
 from metrics import disparate_impact
 from metrics import error_rates
+from plot import plot_2d_decision_boundary
 from scenario import construct_dimp_scenarios
 from train import train_logistic
 from train import train_SVM
@@ -75,7 +77,7 @@ def whitebox_attack(base_clf, train_set, test_set, val_set,
         white_pois_clf, train_set, val_set, test_set, test_sensitive_attribute, val_sensitive_attribute)
 
     # retraining with poisoned points
-    white_pois_clf = white_pois_clf.fit(white_pois_tr)
+    white_pois_clf = white_pois_clf.fit(white_pois_tr.X, white_pois_tr.Y)
     white_pois_ypred = white_pois_clf.predict(test_set.X)
 
     # calculate perfomance metrics
@@ -127,7 +129,7 @@ def blackbox_attack(base_clf, train_set, test_set, val_set,
 
     # retraining with poisoned points
     black_pois_clf = deepcopy(real_model)
-    black_pois_clf = black_pois_clf.fit(black_pois_tr)
+    black_pois_clf = black_pois_clf.fit(black_pois_tr.X, black_pois_tr.Y)
     black_pois_ypred = black_pois_clf.predict(test_set.X)
 
     # calculate performance metrics
@@ -209,15 +211,31 @@ if __name__ == '__main__':
     # construct disparate impact (dimp) scenarios
     dimp_scenarios, scenario_dimps = construct_dimp_scenarios()
 
-    for scenario in dimp_scenarios:
+    for i in range(len(dimp_scenarios)):
+
+        if i==1:
+            break
+
+        scenario = dimp_scenarios[i]
+
         print(f"\n\n ==== {scenario['name']} ====")
         print(f"\t- {scenario['description']}")
 
         # train base model.
         base_output = train_base_model(train_set=scenario["training"], test_set=scenario["test"],
                                        test_sens_attributes=scenario["test_sensitive_att"])
+        scenario = {**scenario, **base_output}
         print('--> Whitebox attack...')
         whitebox_output = whitebox_attack(base_clf=base_output['base_clf'], train_set=scenario["training"],
                                           test_set=scenario["test"], val_set=scenario["validation"],
                                           test_sensitive_attribute=scenario["test_sensitive_att"],
                                           val_sensitive_attribute=scenario["validation_sensitive_att"])
+        scenario = {**scenario, **whitebox_output}
+        dimp_scenarios[i] = scenario
+        print(scenario.keys())
+
+    # save scenarios
+    joblib.dump(dimp_scenarios, 'dimp_scenarios.pkl')
+
+    # plot figure for scenario
+    plot_2d_decision_boundary(dimp_scenarios[0])
